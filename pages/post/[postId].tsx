@@ -12,7 +12,7 @@ interface PostProps {
 
 export default function Post({post:serverPost}:PostProps) {
     const router = useRouter()
-    const [post, setPost]= useState(null)
+    const [post, setPost]= useState(serverPost)
 
     const linkClickHandler =()=>{
         Router.push("/posts")
