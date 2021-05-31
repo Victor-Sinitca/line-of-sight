@@ -1,13 +1,17 @@
 import Router from "next/router";
 import React, {useEffect, useState} from "react";
-import Head from "next/head";
 import {MainLayout} from "../components/MainLayout";
-import {loadGetInitialProps} from "next/dist/next-server/lib/utils";
+import {NextPageContext} from "next/dist/next-server/lib/utils";
 import Link from "next/link";
 import Preloader1 from "../components/Preloader1/Preloader1";
+import {MyPost} from "../interface/post";
 
 
-export default function Posts({posts:serverPosts}) {
+interface PostsPropsType {
+    posts: Array<MyPost>
+}
+
+export default function Posts({posts:serverPosts}:PostsPropsType) {
     const [posts, setPosts] = useState(null)
     const linkClickHandler = () => {
         Router.push("/")
@@ -46,15 +50,15 @@ export default function Posts({posts:serverPosts}) {
 }
 
 
-Posts.getInitialProps = async (ctx) => {
+Posts.getInitialProps = async (ctx:NextPageContext) => {
     const {req} = ctx
     if (!req) {
         return {
             posts: null
         }
     }
-    const response = await fetch("http://localhost:4200/posts")
-    const posts = await response.json()
+    const response = await fetch(`${process.env.API_URL}/posts`)
+    const posts :Array<MyPost> = await response.json()
     return {
         posts
     }
